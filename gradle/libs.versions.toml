@@ -1,6 +1,6 @@
 [versions]
 # gradle
-agp = "8.3.2"
+agp = "8.2.0-alpha08"
 kotlin = "1.9.23"
 core-ktx = "1.13.0"
 lifecycle-runtime-ktx = "2.7.0"
