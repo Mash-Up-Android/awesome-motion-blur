@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":sdk"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
@@ -58,4 +59,5 @@ dependencies {
 
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.renderscript.toolkit)
+    implementation("dev.shreyaspatil:capturable:2.1.0")
 }
