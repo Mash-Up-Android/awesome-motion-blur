@@ -7,7 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -40,16 +39,14 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val bitmap = getBitmapByDrawable(context, R.drawable.small_image)
 
-    bitmap.asImageBitmap()
-
     Image(
         modifier = modifier,
         contentDescription = "",
         bitmap = getMotionBlurBitmap(
             bitmap = bitmap,
             blurAmount = 3,
-            interval = 30,
-            direction = Direction.LEFT
+            interval = 10,
+            direction = Direction.RIGHT
         ).asImageBitmap()
     )
 }
