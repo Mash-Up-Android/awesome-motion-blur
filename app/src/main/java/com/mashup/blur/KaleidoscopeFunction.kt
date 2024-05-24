@@ -1,6 +1,7 @@
 package com.mashup.blur
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.annotation.IntRange
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -13,15 +14,8 @@ fun getKaleidoscopeBitmap(
     @IntRange(from = 0) holeRadius: Int = 0,
     backgroundColor: Color = Color.DarkGray
 ): Bitmap {
-    val sideLength = max(bitmap.width, bitmap.height) * 2 + holeRadius * 2
-    val newBitmap = Bitmap.createBitmap(sideLength, sideLength, bitmap.config)
-
     // 원으로 돌릴 1차원 pixel list 생성
     val arrayList = arrayListOf<Int>().apply {
-        // 가운데 구멍 만들기
-        for (k in 0 until holeRadius*2) {
-            add(backgroundColor.toArgb())
-        }
         // 각 영역에서 많이 사용된 색으로 변환
         for (k in 0 until (bitmap.width / interval) - 1) {
             val map = hashMapOf<Int, Int>() // HashMap<PixelInt, Count>
@@ -35,9 +29,15 @@ fun getKaleidoscopeBitmap(
                 add(map.maxBy { it.value }.key)
             }
         }
-    }
+        // 가운데 구멍 만들기
+        for (k in 0 until holeRadius*2) {
+            add(backgroundColor.toArgb())
+        }
+    }.reversed()
 
-    // 원으로 돌리기
+    val newBitmap = Bitmap.createBitmap(arrayList.size * 2, arrayList.size * 2, bitmap.config)
+
+    // 표현하기
     val middlePositionX = newBitmap.width / 2
     val middlePositionY = newBitmap.height / 2
     for (i in 0 until newBitmap.width) {
