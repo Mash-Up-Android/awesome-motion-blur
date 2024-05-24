@@ -1,7 +1,7 @@
-package com.mashup.blur
+package com.mashup.blur.bitmap
 
 import android.graphics.Bitmap
-import kotlin.math.max
+import com.mashup.blur.common.compose
 
 fun composeLeftTopBitmap(
     baseBitmap: Bitmap,
@@ -30,7 +30,6 @@ fun composeRightBottomBitmap(
     baseBitmap: Bitmap,
     composeBitmap: Bitmap,
     cropRemainArea: Boolean = true  // false : 중첩되어 더해지지 않는 영역 유지
-    // Todo : 이거 이상함. true 일 때 다시 처리
 ): Bitmap {
     val newBitmap = if (cropRemainArea.not()) {
         baseBitmap.copy(baseBitmap.config, true)

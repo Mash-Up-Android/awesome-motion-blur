@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.mashup.blur.Direction
-import com.mashup.blur.getBitmapByDrawable
+import com.mashup.blur.bitmap.getBitmapByDrawable
 import com.mashup.blur.getMotionBlurBitmap
 import com.mashup.ui.theme.AwsomeMotionBlurTheme
 

@@ -1,6 +1,12 @@
 package com.mashup.blur
 
 import android.graphics.Bitmap
+import com.mashup.blur.bitmap.bitmapBottomShift
+import com.mashup.blur.bitmap.bitmapLeftShift
+import com.mashup.blur.bitmap.bitmapRightShift
+import com.mashup.blur.bitmap.bitmapTopShift
+import com.mashup.blur.bitmap.composeLeftTopBitmap
+import com.mashup.blur.bitmap.composeRightBottomBitmap
 
 fun getMotionBlurBitmap(bitmap: Bitmap, blurAmount: Int, interval: Int, direction: Direction): Bitmap {
     var composeBitmap = bitmap.copy(bitmap.config, true)

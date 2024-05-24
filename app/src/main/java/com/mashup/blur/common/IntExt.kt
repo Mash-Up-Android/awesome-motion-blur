@@ -1,4 +1,4 @@
-package com.mashup.blur
+package com.mashup.blur.common
 
 internal infix fun Int.compose(value: Int): Int {
     fun Int.getAlpha() = (this shr 24 and 0xFF)

@@ -1,4 +1,4 @@
-package com.mashup.blur
+package com.mashup.blur.bitmap
 
 import android.graphics.Bitmap
 
