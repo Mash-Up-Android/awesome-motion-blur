@@ -1,18 +1,30 @@
 package com.mashup.blur
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.annotation.IntRange
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import kotlin.math.max
-import kotlin.math.sqrt
+import com.mashup.blur.bitmap.composeBitmap
+import com.mashup.blur.bitmap.rotateBitmap
 
 fun getKaleidoscopeBitmap(
     bitmap: Bitmap,
+    @IntRange(from = 1) bitmapWidthInterval: Int,               // bitmap 가장 많이 사용한 색상 뽑는 width interval
+    @IntRange(from = 0, to = 360) degreesInterval: Int = 15,    // 몇 도씩 회전하여 원으로 만들 것인지
+    @IntRange(from = 0) holeRadius: Int = 0                     // 중앙 빈 공간 반지름 pixel 값
+): Bitmap {
+    var composeBitmap = getKaleidoscopeFirstBitmap(bitmap, bitmapWidthInterval, holeRadius)
+    for (i in 0 .. 360 step degreesInterval) {
+        val newBitmap = rotateBitmap(composeBitmap, i.toFloat())
+        composeBitmap = composeBitmap(composeBitmap, newBitmap)
+    }
+    return composeBitmap
+}
+
+private fun getKaleidoscopeFirstBitmap(
+    bitmap: Bitmap,
     @IntRange(from = 1) interval: Int,
-    @IntRange(from = 0) holeRadius: Int = 0,
-    backgroundColor: Color = Color.DarkGray
+    @IntRange(from = 0) holeRadius: Int = 0
 ): Bitmap {
     // 원으로 돌릴 1차원 pixel list 생성
     val arrayList = arrayListOf<Int>().apply {
@@ -30,25 +42,17 @@ fun getKaleidoscopeBitmap(
             }
         }
         // 가운데 구멍 만들기
-        for (k in 0 until holeRadius*2) {
-            add(backgroundColor.toArgb())
-        }
-    }.reversed()
-
-    val newBitmap = Bitmap.createBitmap(arrayList.size * 2, arrayList.size * 2, bitmap.config)
-
-    // 표현하기
-    val middlePositionX = newBitmap.width / 2
-    val middlePositionY = newBitmap.height / 2
-    for (i in 0 until newBitmap.width) {
-        for (j in 0 until newBitmap.height) {
-            val distance = sqrt(
-                (i - middlePositionX) * (i - middlePositionX)
-                        + (j - middlePositionY) * (j - middlePositionY).toDouble()
-            ).toInt()
-            newBitmap.setPixel(i, j, arrayList.getOrElse(distance) { backgroundColor.toArgb() })
+        for (k in 0 until holeRadius * 2) {
+            add(Color.Transparent.toArgb())
         }
     }
 
+    val newBitmap = Bitmap.createBitmap(arrayList.size * 2, arrayList.size * 2, bitmap.config)
+    val middleOfHeight = (newBitmap.height - bitmap.height) / 2
+    for (i in 0 until newBitmap.width / 2) {
+        for (j in middleOfHeight until middleOfHeight + bitmap.height) {
+            newBitmap.setPixel(i, j, arrayList[i])
+        }
+    }
     return newBitmap
 }

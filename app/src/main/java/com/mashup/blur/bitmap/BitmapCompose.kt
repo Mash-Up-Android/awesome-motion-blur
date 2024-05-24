@@ -50,3 +50,34 @@ fun composeRightBottomBitmap(
     }
     return newBitmap
 }
+
+fun composeBitmap(
+    baseBitmap: Bitmap,
+    composeBitmap: Bitmap
+): Bitmap {
+    val newBitmap = Bitmap.createBitmap(composeBitmap.width, composeBitmap.height, composeBitmap.config)
+    for (i in 0 until composeBitmap.width) {
+        for (j in 0 until composeBitmap.height) {
+            if (baseBitmap.getPixel(i, j) != 0 && composeBitmap.getPixel(i, j) != 0) {
+                newBitmap.setPixel(
+                    i,
+                    j,
+                    baseBitmap.getPixel(i, j) compose composeBitmap.getPixel(i, j)
+                )
+            } else if (baseBitmap.getPixel(i, j) != 0){
+                newBitmap.setPixel(
+                    i,
+                    j,
+                    baseBitmap.getPixel(i, j)
+                )
+            } else {
+                newBitmap.setPixel(
+                    i,
+                    j,
+                    composeBitmap.getPixel(i, j)
+                )
+            }
+        }
+    }
+    return newBitmap
+}

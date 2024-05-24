@@ -1,6 +1,5 @@
 package com.mashup
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,13 +10,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.mashup.blur.Direction
 import com.mashup.blur.bitmap.getBitmapByDrawable
 import com.mashup.blur.getKaleidoscopeBitmap
-import com.mashup.blur.getMotionBlurBitmap
 import com.mashup.ui.theme.AwsomeMotionBlurTheme
 
 class MainActivity : ComponentActivity() {
@@ -47,8 +43,9 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         contentDescription = "",
         bitmap = getKaleidoscopeBitmap(
             bitmap = bitmap,
-            interval = 10,
-            holeRadius = 30
+            bitmapWidthInterval = 10,
+            degreesInterval = 15,
+            holeRadius = 30,
         ).asImageBitmap()
     )
 }
