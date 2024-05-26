@@ -1,7 +1,8 @@
-package com.mashup.blur.kaleidoscope
+package com.mashup.blur.motionblur
 
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
+import androidx.annotation.IntRange
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -16,22 +17,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun KaleidoscopeImage(
+fun MotionBlurImage(
     modifier: Modifier,
     @DrawableRes resId: Int,
+    @IntRange(from = 0) blurAmount: Int,
+    @IntRange(from = 0) interval: Int,
+    direction: Direction,
     indicator: @Composable (Modifier) -> Unit = { }
 ) {
     val context = LocalContext.current
     val bitmap = getBitmapByDrawable(context, resId)
 
     // 비동기로 KaleidoscopeBitmap을 생성하고 상태를 유지
-    val kaleidoscopeBitmap by produceState<Bitmap?>(null) {
+    val motionBlurBitmap by produceState<Bitmap?>(null) {
         withContext(Dispatchers.Default) {
-            value = getKaleidoscopeBitmap(
+            value = getMotionBlurBitmap(
                 bitmap = bitmap,
-                bitmapWidthInterval = 10,
-                degreesInterval = 15,
-                holeRadius = 30,
+                blurAmount = blurAmount,
+                interval = interval,
+                direction = direction
             )
         }
     }
@@ -40,7 +44,7 @@ fun KaleidoscopeImage(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        kaleidoscopeBitmap?.let {
+        motionBlurBitmap?.let {
             Image(
                 modifier = modifier,
                 contentDescription = "",
