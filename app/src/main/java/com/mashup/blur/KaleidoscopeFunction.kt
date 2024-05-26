@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import androidx.annotation.IntRange
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.mashup.blur.bitmap.composeBitmap
+import com.mashup.blur.bitmap.composeBitmapList
 import com.mashup.blur.bitmap.rotateBitmap
 
 fun getKaleidoscopeBitmap(
@@ -14,10 +14,12 @@ fun getKaleidoscopeBitmap(
     @IntRange(from = 0) holeRadius: Int = 0                     // 중앙 빈 공간 반지름 pixel 값
 ): Bitmap {
     var composeBitmap = getKaleidoscopeFirstBitmap(bitmap, bitmapWidthInterval, holeRadius)
-    for (i in 0 .. 360 step degreesInterval) {
-        val newBitmap = rotateBitmap(composeBitmap, i.toFloat())
-        composeBitmap = composeBitmap(composeBitmap, newBitmap)
+    val list = mutableListOf<Bitmap>().apply {
+        for (i in degreesInterval..360 step degreesInterval) {
+            add(rotateBitmap(composeBitmap, i.toFloat()))
+        }
     }
+    composeBitmap = composeBitmapList(list)
     return composeBitmap
 }
 

@@ -1,15 +1,19 @@
 package com.mashup.blur.common
 
-internal infix fun Int.compose(value: Int): Int {
-    fun Int.getAlpha() = (this shr 24 and 0xFF)
-    fun Int.getRed() = (this shr 16 and 0xFF)
-    fun Int.getGreen() = (this shr 8 and 0xFF)
-    fun Int.getBlue() = (this shr 0 and 0xFF)
+import androidx.core.graphics.alpha
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 
-    return (((this.getAlpha() + value.getAlpha()) / 2) shl 24) or
-            (((this.getRed() + value.getRed()) / 2) shl 16) or
-            (((this.getGreen() + value.getGreen()) / 2) shl 8) or
-            (((this.getBlue() + value.getBlue()) / 2) shl 0)
+internal infix fun Int.compose(value: Int): Int {
+    return makeColorInt(
+        r = (this.red + value.red) / 2,
+        g = (this.green + value.green) / 2,
+        b = (this.blue + value.blue) / 2,
+        a = (this.alpha + value.alpha) / 2
+    )
 }
+
+fun makeColorInt(r: Int, g: Int, b: Int, a: Int = 0xFF) = b or (g shl 8) or (r shl 16) or (a shl 24)
 
 fun Int.toHexColorString() = String.format("#%08X", 0xFFFFFFFF and this.toLong())
