@@ -23,6 +23,9 @@ fun getKaleidoscopeBitmap(
     return composeBitmap
 }
 
+/**
+ * Kaleidoscope 를 원으로 돌려가면서 다하기 전 초기의 이미지 생성 함순
+ */
 private fun getKaleidoscopeFirstBitmap(
     bitmap: Bitmap,
     @IntRange(from = 1) interval: Int,
