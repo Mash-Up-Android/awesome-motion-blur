@@ -58,4 +58,6 @@ dependencies {
 
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.renderscript.toolkit)
+
+    implementation("io.coil-kt:coil-compose:2.6.0") // Todo : version catalog 전환
 }

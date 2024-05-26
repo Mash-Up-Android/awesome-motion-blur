@@ -1,4 +1,4 @@
-package com.mashup.blur
+package com.mashup.blur.kaleidoscope
 
 import android.graphics.Bitmap
 import androidx.annotation.IntRange

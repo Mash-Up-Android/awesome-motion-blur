@@ -1,4 +1,4 @@
-package com.mashup.blur
+package com.mashup.blur.motionblur
 
 import android.graphics.Bitmap
 import com.mashup.blur.bitmap.bitmapBottomShift

@@ -3,17 +3,21 @@ package com.mashup
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.mashup.blur.bitmap.getBitmapByDrawable
-import com.mashup.blur.getKaleidoscopeBitmap
+import com.mashup.blur.kaleidoscope.KaleidoscopeImage
 import com.mashup.ui.theme.AwsomeMotionBlurTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,19 +39,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    val bitmap = getBitmapByDrawable(context, R.drawable.small_image)
+    var isShow by rememberSaveable { mutableStateOf(false) }
+    if (isShow.not()) {
+        Button(onClick = { isShow = isShow.not() }) { Text(text = "누르세요" )}
+    }
 
-    Image(
-        modifier = modifier,
-        contentDescription = "",
-        bitmap = getKaleidoscopeBitmap(
-            bitmap = bitmap,
-            bitmapWidthInterval = 10,
-            degreesInterval = 15,
-            holeRadius = 30,
-        ).asImageBitmap()
-    )
+    if (isShow) {
+        KaleidoscopeImage(
+            modifier = modifier.fillMaxSize(),
+            resId = R.drawable.small_image,
+            indicator = { CircularProgressIndicator(it.wrapContentSize()) }
+        )
+    }
 }
 
 @Preview(showBackground = true)
