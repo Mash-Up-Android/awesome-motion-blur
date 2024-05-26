@@ -29,6 +29,7 @@ fun getMotionBlurBitmap(bitmap: Bitmap, blurAmount: Int, interval: Int, directio
             Direction.RIGHT, Direction.BOTTOM ->
                 composeRightBottomBitmap(composeBitmap, shiftBitmap)
         }
+        shiftBitmap.recycle()
     }
     return composeBitmap
 }

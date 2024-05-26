@@ -13,14 +13,16 @@ fun getKaleidoscopeBitmap(
     @IntRange(from = 0, to = 360) degreesInterval: Int = 15,    // 몇 도씩 회전하여 원으로 만들 것인지
     @IntRange(from = 0) holeRadius: Int = 0                     // 중앙 빈 공간 반지름 pixel 값
 ): Bitmap {
-    var composeBitmap = getKaleidoscopeFirstBitmap(bitmap, bitmapWidthInterval, holeRadius)
+    val composeBitmap = getKaleidoscopeFirstBitmap(bitmap, bitmapWidthInterval, holeRadius)
     val list = mutableListOf<Bitmap>().apply {
         for (i in degreesInterval..360 step degreesInterval) {
             add(rotateBitmap(composeBitmap, i.toFloat()))
         }
     }
-    composeBitmap = composeBitmapList(list)
-    return composeBitmap
+    val newBitmap = composeBitmapList(list)
+    composeBitmap.recycle()
+    list.forEach { it.recycle() }
+    return newBitmap
 }
 
 /**
