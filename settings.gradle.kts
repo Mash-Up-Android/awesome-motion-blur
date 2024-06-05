@@ -21,5 +21,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AwsomeMotionBlur"
 include(":app")
-include(":sdk")
- 

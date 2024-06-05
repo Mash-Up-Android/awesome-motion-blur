@@ -2,39 +2,34 @@ package com.mashup
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ExperimentalComposeApi
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.scale
 import com.mashup.ui.theme.AwsomeMotionBlurTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.opencv.android.OpenCVLoader
+import toKaleidoscope
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        OpenCVLoader.initLocal()
         setContent {
             AwsomeMotionBlurTheme {
                 // A surface container using the 'background' color from the theme
@@ -44,34 +39,49 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalComposeApi::class)
 @Composable
 fun Test(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val bitmap = context.resources.getDrawable(R.drawable.img_train, null).toBitmap()
-    var image: Bitmap? by remember {
+    val compressedWidth = 400
+    val compressedHeight= 200
+    val originBitmap = context.resources.getDrawable(R.drawable.img_train, null).toBitmap().scale(compressedWidth, compressedHeight)
+    val bitmap =
+        context.resources.getDrawable(R.drawable.img_train, null).toBitmap().toKaleidoscope(
+            widthIntervalAreaSize = 50,
+            heightIntervalAreaSize = 200,
+            compressedWidth = compressedWidth,
+            compressedHeight = compressedHeight
+        )
+    val image: Bitmap by remember {
         mutableStateOf(
             bitmap
         )
     }
 
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            image = test(context = context, interval = 3, translate = 200f)
-            Log.e("Image :::", "$image")
-        }
-    }
-
     Box(
-        modifier = modifier.background(color = Color.Green),
+        modifier = modifier
     ) {
-        image?.let {
-            Log.e("Image :::", "${it.width} ${it.height}")
-            Image(
-                bitmap = it.asImageBitmap(),
-                contentDescription = null,
-            )
+        KaleidoScopeImage(
+            image = image.asImageBitmap(),
+            modifier = Modifier
+                .size(500.dp)
+                .align(Alignment.Center),
+            radius = 500f
+        ){
+            Box(
+                contentAlignment = Alignment.Center
+            ){
+                Image(
+                    bitmap = originBitmap.asImageBitmap(),
+                    contentDescription = null
+                )
+                Text(
+                    text = "Sample Image",
+                    color = Color.White
+                )
+            }
         }
+
     }
 }
 
